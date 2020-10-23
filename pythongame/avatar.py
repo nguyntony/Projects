@@ -652,7 +652,7 @@ class Map(object):
 puzzles = Puzzle()
 player = User()
 enemy = Enemy()
-a_map = Map("fire room")
+a_map = Map("opening scene")
 a_game = Engine(a_map)
 
 a_game.play()
