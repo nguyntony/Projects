@@ -63,7 +63,7 @@ class User(object):
                             damage = 30
                             enemy.hp -= damage
                     elif ability == 1:
-                        print("You dealt 10 damage.")
+                        print("[ AVATAR ] You dealt 10 damage.")
                         damage = 10
                         enemy.hp -= damage
                     break
