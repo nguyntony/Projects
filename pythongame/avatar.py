@@ -290,6 +290,7 @@ class Puzzle(object):
         opponent = opponent_elements[randint(0, 2)]
         choice = input(
             "Choose an element (Fire, Water, or Earth):\n> ").lower()
+        # choice = choice.lower()
         rounds = 0
 
         while rounds < 3:
@@ -326,9 +327,9 @@ class Puzzle(object):
                 elif opponent == "water":
                     print("[Outcome] You hurl a barrage of small fireballs at the water sprite, it blocks your attack with a powerful wave. You get hurt by following water whip.")
             else:
-                print("Select one of the three elements.")
+                print("Select one of the three elements.\n", opponent_elements)
             if rounds < 3:
-                choice = input("\nChoose an element.\n> ")
+                choice = input("\nChoose an element.\n> ").lower()
                 opponent = opponent_elements[randint(0, 2)]
                 Scene.clear(self)
 
@@ -375,8 +376,8 @@ class AirRoom(Scene):
         Scene.clear(self)
 
         print("You read through the Lost Air Scroll and it offers two abilites, however you are only able to master one of the two abilities. Which skill would you like to master?\n")
-        print(f"[ 1. LEAPING WHIRLWIND ]\nThis is a defensive ability that allows you to move quickly through the air, your opponent will have a difficult time landing a direct hit.\n\n")
-        print(f"[ 2. HURRICANE BARRAGE ]\nThis is an offensive ability that generates devastating wind currents around your opponent.\n\n")
+        print(f"[ 1. HURRICANE BARRAGE ]\nThis is an offensive ability that generates devastating wind currents around your opponent.\n\n")
+        print(f"[ 2. LEAPING WHIRLWIND ]\nThis is a defensive ability that allows you to move quickly through the air, your opponent will have a difficult time landing a direct hit.\n\n")
         print("Please select 1 or 2.")
 
         while True:
@@ -384,12 +385,12 @@ class AirRoom(Scene):
                 choice = int(input("> "))
 
                 if choice == 1:
-                    player.defend.append("Leaping Whirlwind")
-                    choice = "Leaping Whirlwind"
-                    break
-                elif choice == 2:
                     player.attack.append("Hurricane Barrage")
                     choice = "Hurricane Barrage"
+                    break
+                elif choice == 2:
+                    player.attack.defend("Leaping Whirlwind")
+                    choice = "Leaping Whirlwind"
                     break
                 else:
                     print("Please select the number 1 or 2.")
@@ -434,8 +435,8 @@ class WaterRoom(Scene):
         Scene.clear(self)
 
         print("You read through the Lost Water Scroll and it offers two abilites, however you are only able to master one of the two abilities. Which skill would you like to master?\n")
-        print(f"[ 1. CRYO SHIELD ]\nThis is a defensive ability that creates an ice shield to block your opponent's attacks.\n")
-        print(f"[ 2. OCTO STANCE ]\nThis is an offensive ability that generates multiple water arms to launch a flurry of water whips against your opponent.\n\n")
+        print(f"[ 1. OCTO STANCE ]\nThis is an offensive ability that generates multiple water arms to launch a flurry of water whips against your opponent.\n")
+        print(f"[ 2. CRYO SHIELD ]\nThis is a defensive ability that creates an ice shield to block your opponent's attacks.\n\n")
         print("Please select 1 or 2.")
 
         while True:
@@ -443,12 +444,12 @@ class WaterRoom(Scene):
                 choice = int(input("> "))
 
                 if choice == 1:
-                    player.defend.append("Cryo Shield")
-                    choice = "Cryo Shield"
-                    break
-                elif choice == 2:
                     player.attack.append("Octo Stance")
                     choice = "Octo Stance"
+                    break
+                elif choice == 2:
+                    player.defend.append("Cryo Shield")
+                    choice = "Cryo Shield"
                     break
                 else:
                     print("Please select the number 1 or 2.")
@@ -486,8 +487,8 @@ class EarthRoom(Scene):
         Scene.clear(self)
 
         print("You read through the Lost Earth Scroll and it offers two abilites, however you are only able to master one of the two abilities. Which skill would you like to master?\n")
-        print(f"[ 1. LAND RIFT ]\nThis is a defensive ability that shifts the landscape of the battle and causes your opponent to miss their attack.\n\n")
-        print(f"[ 2. EARTHQUAKE ]\nThis is an offensive ability that locks down your opponent by manipulating their surroundings.\n\n")
+        print(f"[ 1. EARTHQUAKE ]\nThis is an offensive ability that locks down your opponent by manipulating their surroundings.\n\n")
+        print(f"[ 2. LAND RIFT ]\nThis is a defensive ability that shifts the landscape of the battle and causes your opponent to miss their attack.\n\n")
         print("Please select 1 or 2.")
 
         while True:
@@ -495,12 +496,12 @@ class EarthRoom(Scene):
                 choice = int(input("> "))
 
                 if choice == 1:
-                    player.defend.append("Land Rift")
-                    choice = "Land Rift"
-                    break
-                elif choice == 2:
                     player.attack.append("Earthquake")
                     choice = "Earthquake"
+                    break
+                elif choice == 2:
+                    player.defend.append("Land Rift")
+                    choice = "Land Rift"
                     break
                 else:
                     print("Please select the number 1 or 2.")
@@ -537,8 +538,8 @@ class FireRoom(Scene):
         Scene.clear(self)
 
         print("You read through the Lost fire Scroll and it offers two abilites, however you are only able to master one of the two abilities. Which skill would you like to master?\n")
-        print(f"[ 1. OVERHEAT ]\nThis is a defensive ability that will incinerate anything your opponent throws at you.\n\n")
-        print(f"[ 2. LIGHTNING STRIKE ]\nThis is an offensive ability that strike your opponent with a powerful jolt of electricity.\n\n")
+        print(f"[ 1. LIGHTNING STRIKE ]\nThis is an offensive ability that strike your opponent with a powerful jolt of electricity.\n\n")
+        print(f"[ 2. OVERHEAT ]\nThis is a defensive ability that will incinerate anything your opponent throws at you.\n\n")
         print("Please select 1 or 2.")
 
         while True:
@@ -546,12 +547,12 @@ class FireRoom(Scene):
                 choice = int(input("> "))
 
                 if choice == 1:
-                    player.defend.append("Overheat")
-                    choice = "Overheat"
-                    break
-                elif choice == 2:
                     player.attack.append("Lightning Strike")
                     choice = "Lightning Strike"
+                    break
+                elif choice == 2:
+                    player.defend.append("Overheat")
+                    choice = "Overheat"
                     break
                 else:
                     print("Please select the number 1 or 2.")
@@ -570,7 +571,7 @@ class FireRoom(Scene):
 class FinalScene(Scene):
 
     def enter(self):
-        print("the end")
+        print("The end")
         return 'final scene'
 
 
@@ -589,10 +590,10 @@ class BossBattle(Scene):
         i = 0
         while True:
 
-            if player.hp == 0:
+            if player.hp <= 0:
                 print("You have failed the world...You could not beat Fire Lord Ozai so he has taken over the world. All hope is lost...")
                 return 'final scene'
-            if enemy.hp == 0:
+            if enemy.hp <= 0:
                 print(
                     "You have defeated the Fire Lord! Peace is restored and you found a well paying job!!")
                 return 'final scene'
@@ -651,7 +652,7 @@ class Map(object):
 puzzles = Puzzle()
 player = User()
 enemy = Enemy()
-a_map = Map("opening scene")
+a_map = Map("fire room")
 a_game = Engine(a_map)
 
 a_game.play()
