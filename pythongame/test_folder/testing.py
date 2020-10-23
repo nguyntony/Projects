@@ -29,3 +29,36 @@ class Map:
 # input("The pattern is...")
 
 print(Back.GREEN + " ")
+
+# caution = "With great power comes with great responsiblity."
+# print("Which element would you like master first?")
+# element_type = ["Water", "Fire", "Earth", "Air"]
+
+# for element in element_type:
+#     print(f"[ {element} ]", end=" ")
+
+# while True:
+#     choice = input("\n> ").lower()
+
+#     if choice == "water":
+#         print(
+#             "Water represents soul, it has a strong connection with healing, intuition and emotion.\n", caution)
+#         player.bender = "waterbender"
+#         break
+#     elif choice == "fire":
+#         print(
+#             "Fire represents spirit, it has a strong connection with passion, desire and motivation.\n", caution)
+#         player.bender = "firebender"
+#         break
+#     elif choice == "earth":
+#         print(
+#             "Earth represents body, it has a strong connection with health, security and stability.\n", caution)
+#         player.bender = "earthbender"
+#         break
+#     elif choice == "air":
+#         print(
+#             "Air represents mind, it has as strong connection with perception, communication and strategy.\n", caution)
+#         player.bender = "airbender"
+#         break
+#     else:
+#         print("Please select an element.")
