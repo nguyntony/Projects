@@ -54,11 +54,11 @@ class User(object):
                             print(player.attack_desc[skilldesc])
                             break
                         luck = randint(1, 10)
-                        if luck <= 3:
+                        if luck <= 7:
                             print("You dealt 20 damage.")
                             damage = 20
                             enemy.hp -= damage
-                        elif luck > 3:
+                        elif luck > 7:
                             print("You dealt 30 damage.")
                             damage = 30
                             enemy.hp -= damage
