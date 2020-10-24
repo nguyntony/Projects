@@ -389,7 +389,7 @@ class AirRoom(Scene):
                     choice = "Hurricane Barrage"
                     break
                 elif choice == 2:
-                    player.attack.defend("Leaping Whirlwind")
+                    player.defend.append("Leaping Whirlwind")
                     choice = "Leaping Whirlwind"
                     break
                 else:
