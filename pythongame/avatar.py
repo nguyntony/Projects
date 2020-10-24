@@ -2,6 +2,8 @@ from textwrap import dedent
 from os import system, name
 import time
 from random import randint
+import random
+from colorama import Fore, Back, Style
 
 
 class User(object):
@@ -13,15 +15,15 @@ class User(object):
         self.attack = ["Basic Attack"]
         self.attack_desc = {
             'Hurricane Barrage': '[ AVATAR ] You hurl devastating wind currents towards the Fire Lord.',
-            'Octo Stance': '[ AVATAR ] You attack the Fire Lord with several water whips at all directions.',
-            'Earthquake': '[ AVATAR ] The ground near the Fire Lord shakes, as small boulders hit him from the impact.',
-            'Lightning Strike': '[ AVATAR ] You strike a powerful jolt of electricity at the Fire Lord'
+            'Tidal Whip': '[ AVATAR ] You attack the Fire Lord with several water whips at all directions.',
+            'Geo Smash': '[ AVATAR ] The ground near the Fire Lord shakes, as small boulders hit him from the impact.',
+            'Electro Shock': '[ AVATAR ] You strike a powerful jolt of electricity at the Fire Lord.'
         }
         self.defend = ["Block"]
         self.defend_desc = {
             'Leaping Whirlwind': '[ AVATAR ] You launch yourself into the air, attempting to dodge the Fire Lord\'s attack.',
-            'Overheat': '[ AVATAR ] You blast a scorching fire from your palms, attempting to absorb the Fire Lord\'s attack.',
-            'Land Rift': '[ AVATAR ] You shift the land around the Fire Lord, causing him to not land a direct hit.',
+            'Scorching Barrier': '[ AVATAR ] You blast a scorching fire from your palms, attempting to absorb the Fire Lord\'s attack.',
+            'Terraform': '[ AVATAR ] You shift the land around the Fire Lord, causing him to not land a direct hit.',
             'Cryo Shield': '[ AVATAR ] You shield yourself with a thick armor of ice, minimizing the damage from the Fire Lord\'s attack.'
         }
 
@@ -125,8 +127,6 @@ class Enemy(object):
                             skilldesc = player.defend[ability - 1]
                             print(player.defend_desc[skilldesc])
                             break
-                        # print(
-                        #     "You attempt to shield yourself from the incoming attack.")
                         print(f"You took {hit} damage.")
                         player.hp -= hit
                     elif ability == 1:
@@ -177,13 +177,23 @@ class Engine(object):
 class Puzzle(object):
 
     def first_puz(self):
-        # first puzzle is a simple riddle that the user must guess.
-        answer = "confidence"
 
-        print("Journey without it and you will never prevail, but if you have too much of it you will surely fail.\n")
+        riddles = {
+            'confidence': "Journey without it and you will never prevail, but if you have too much of it you will surely fail.\n",
+            'your name': "It belongs to you, but other people use it more than you do.\n",
+            'piano': "What has many keys but can't open a single lock?\n",
+            'footsteps': "The more you take, the more you leave behind. What am I?\n",
+            'tomorrow': "What is always coming but never arrives?\n",
+
+        }
+        riddles_key = ["confidence", "your name", "piano", "footsteps"]
+        random_num = randint(0, len(riddles_key) - 1)
+        answer = riddles_key[random_num]
+        chosen_riddle = riddles[answer]
+
+        print(chosen_riddle)
 
         attempts = 0
-
         while True:
             user_answer = input("Answer:\n> ").lower()
 
@@ -207,12 +217,29 @@ class Puzzle(object):
         \t\t-------------------------------------"""))
         input("\nPress 'RETURN' when you are ready.")
 
-        answer = "wssadwda"
+        answer = []
+        sequence = ["up", "down", "left", "right",
+                    "up", "down", "right"]
+        random.shuffle(sequence)
+
+        for i in sequence:
+            if i == "up":
+                answer.append("w")
+            elif i == "down":
+                answer.append("s")
+            elif i == "left":
+                answer.append("a")
+            else:
+                answer.append("d")
+
+        sequence = ", ".join(sequence)
+        answer = "".join(answer)
+
         seconds = 5
-        attempts = 3
+        attempts = 2
 
         print(
-            f"[ UP, DOWN, DOWN, LEFT, RIGHT, UP, RIGHT, LEFT ]\n\nYou have {seconds} seconds to memorize this sequence.")
+            f"\n{[sequence.upper()]}\n\nYou have {seconds} seconds to memorize this sequence.")
 
         while True:
             time.sleep(seconds)
@@ -231,9 +258,10 @@ class Puzzle(object):
                     if attempts == 0:
                         seconds += 2
                         attempts = 3
-                        print("This is your last chance to see the scroll.")
                         print(
-                            f"[ UP, DOWN, DOWN, LEFT, RIGHT, UP, RIGHT, LEFT ]\n\nYou have {seconds} seconds to memorize this sequence.")
+                            "You somehow manage to take another glimpse of the scroll.")
+                        print(
+                            f"{[sequence.upper()]}\n\nYou have {seconds} seconds to memorize this sequence.")
                         time.sleep(seconds)
                         Scene.clear(self)
             break
@@ -246,6 +274,8 @@ class Puzzle(object):
 
         pillars = [1, 2, 3, 4, 5]
         answer = [3, 5, 1, 4, 2]
+        random.shuffle(answer)
+
         i = 0
 
         pillars_img = "- - - - -"
@@ -257,7 +287,7 @@ class Puzzle(object):
             i += 1
             while True:
                 try:
-                    attempt = input()
+                    attempt = input("> ")
                     attempt = int(attempt)
                     break
                 except ValueError:
@@ -277,18 +307,16 @@ class Puzzle(object):
                     print("You got it.\n")
                     break
 
-                print("-" * 20)
                 print(
-                    f"\nThe pillar lights.\n\n[ {final} ]\n\nWhich pillar do you want to light?\n{pillars}\n")
+                    f"The pillar lights.\n\n[ {final} ]\n\nWhich pillar do you want to light?\n{pillars}\n")
 
             else:
                 i = 0
                 pillars = [1, 2, 3, 4, 5]
                 imglist = pillars_img.split()
                 final = " ".join(imglist)
-                print("-" * 20)
                 print(
-                    f"\nThe pillars all dim.\n\n[ {final} ]\n\nWhich pillar do you want to light?\n{pillars}")
+                    f"The pillars all dim.\n\n[ {final} ]\n\nWhich pillar do you want to light?\n{pillars}")
 
     def fourth_puz(self):
         print("You are trapped in a maze alone... or so you think.\n\nA powerful sprite appears, it can harness different elements, thus allowing it to change forms to unleash devatasting attacks. You notice that the sprite has a weak spot. Hit the weak spot 3 times to defeat the sprite!")
@@ -446,8 +474,8 @@ class WaterRoom(Scene):
         input("\nPress 'RETURN' to continue.")
         Scene.clear(self)
 
-        print("You read through the Lost Water Scroll and it offers two abilites, however you are only able to master one of the two abilities. Which skill would you like to master?\n")
-        print(f"[ 1. OCTO STANCE ]\nThis is an offensive ability that generates multiple water arms to launch a flurry of water whips against your opponent.\n")
+        print("You read the Lost Water Scroll and it offers two abilites, however you are only able to master one of the two abilities. Which skill would you like to master?\n")
+        print(f"[ 1. TIDAL WHIP ]\nThis is an offensive ability that generates multiple water arms to launch a flurry of water whips against your opponent.\n")
         print(f"[ 2. CRYO SHIELD ]\nThis is a defensive ability that creates an ice shield to block your opponent's attacks.\n\n")
         print("Please select 1 or 2.")
 
@@ -456,8 +484,8 @@ class WaterRoom(Scene):
                 choice = int(input("> "))
 
                 if choice == 1:
-                    player.attack.append("Octo Stance")
-                    choice = "Octo Stance"
+                    player.attack.append("Tidal Whip")
+                    choice = "Tidal Whip"
                     break
                 elif choice == 2:
                     player.defend.append("Cryo Shield")
@@ -487,7 +515,7 @@ class EarthRoom(Scene):
         print(
             f"'Good job, {player.name} you finally completed your training. You are ready to begin your next challenge.'\n")
 
-        print("You begin your journey by hiking through mountains, in search of the temple. You find yourself at the peak of one of the tallest mountains in that area. You decided to take a short break when the landscape started changing.")
+        print("You begin your journey by hiking through mountains, in search of the temple. You find yourself at the peak of one of the tallest mountains in that area. You decided to take a short break when the landscape starts changing.")
 
         input("\nPress 'RETURN' to continue.")
         Scene.clear(self)
@@ -498,9 +526,9 @@ class EarthRoom(Scene):
         input("\nPress 'RETURN' to continue.")
         Scene.clear(self)
 
-        print("You read through the Lost Earth Scroll and it offers two abilites, however you are only able to master one of the two abilities. Which skill would you like to master?\n")
-        print(f"[ 1. EARTHQUAKE ]\nThis is an offensive ability that locks down your opponent by manipulating their surroundings.\n\n")
-        print(f"[ 2. LAND RIFT ]\nThis is a defensive ability that shifts the landscape of the battle and causes your opponent to miss their attack.\n\n")
+        print("You read the Lost Earth Scroll and it offers two abilites, however you are only able to master one of the two abilities. Which skill would you like to master?\n")
+        print(f"[ 1. GEO SMASH ]\nThis is an offensive ability that locks down your opponent by manipulating their surroundings.\n")
+        print(f"[ 2. TERRAFORM ]\nThis is a defensive ability that shifts the landscape of the battle and causes your opponent to miss their attack.\n\n")
         print("Please select 1 or 2.")
 
         while True:
@@ -508,12 +536,12 @@ class EarthRoom(Scene):
                 choice = int(input("> "))
 
                 if choice == 1:
-                    player.attack.append("Earthquake")
-                    choice = "Earthquake"
+                    player.attack.append("Geo Smash")
+                    choice = "Geo Smash"
                     break
                 elif choice == 2:
-                    player.defend.append("Land Rift")
-                    choice = "Land Rift"
+                    player.defend.append("Terraform")
+                    choice = "Terraform"
                     break
                 else:
                     print("Please select the number 1 or 2.")
@@ -549,9 +577,9 @@ class FireRoom(Scene):
         input("\nPress 'RETURN' to continue.")
         Scene.clear(self)
 
-        print("You read through the Lost fire Scroll and it offers two abilites, however you are only able to master one of the two abilities. Which skill would you like to master?\n")
-        print(f"[ 1. LIGHTNING STRIKE ]\nThis is an offensive ability that strike your opponent with a powerful jolt of electricity.\n\n")
-        print(f"[ 2. OVERHEAT ]\nThis is a defensive ability that will incinerate anything your opponent throws at you.\n\n")
+        print("You read the Lost fire Scroll and it offers two abilites, however you are only able to master one of the two abilities. Which skill would you like to master?\n")
+        print(f"[ 1. ELECTRO SHOCK ]\nThis is an offensive ability that strike your opponent with a powerful jolt of electricity.\n\n")
+        print(f"[ 2. SCORCHING BARRIER ]\nThis is a defensive ability that will incinerate anything your opponent throws at you.\n\n")
         print("Please select 1 or 2.")
 
         while True:
@@ -559,12 +587,12 @@ class FireRoom(Scene):
                 choice = int(input("> "))
 
                 if choice == 1:
-                    player.attack.append("Lightning Strike")
-                    choice = "Lightning Strike"
+                    player.attack.append("Electro Shock")
+                    choice = "Electro Shock"
                     break
                 elif choice == 2:
-                    player.defend.append("Overheat")
-                    choice = "Overheat"
+                    player.defend.append("Scorching Barrier")
+                    choice = "Scorching Barrier"
                     break
                 else:
                     print("Please select the number 1 or 2.")
