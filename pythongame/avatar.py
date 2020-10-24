@@ -59,7 +59,7 @@ class User(object):
                             damage = 20
                             enemy.hp -= damage
                         elif luck > 6:
-                            print("You dealt 30 damage.")
+                            print("You landed a critical hit. You dealt 30 damage.")
                             damage = 30
                             enemy.hp -= damage
                     elif ability == 1:
@@ -87,7 +87,7 @@ class Enemy(object):
 
     def enemy_attacks(self):
         random_num = randint(0, 3)
-        hit = 20
+        hit = 15
 
         print(f"\n[ FIRE LORD OZAI ] {enemy.skills[random_num]}")
         print(f"You took {hit} damage.\n")
@@ -117,7 +117,7 @@ class Enemy(object):
                 try:
                     ability = int(input("\n> "))
                     if ability > 1:
-                        block = 10
+                        block = 15
                         hit -= block
                         print(
                             f"\n[ FIRE LORD OZAI ] {enemy.skills[random_num]}\n")
@@ -182,14 +182,21 @@ class Puzzle(object):
 
         print("Journey without it and you will never prevail, but if you have too much of it you will surely fail.\n")
 
+        attempts = 0
+
         while True:
-            user_answer = input("> ").lower()
+            user_answer = input("Answer:\n> ").lower()
+
+            if attempts > 2:
+                print("Maybe try googling the answer...")
+
             if user_answer == answer:
                 print("That's right!")
                 break
                 # have the game continue
             else:
                 print("Try again.\n")
+                attempts += 1
 
     def second_puz(self):
         # second puzzle will be a memorization game.
@@ -248,8 +255,13 @@ class Puzzle(object):
 
         while True:
             i += 1
-            attempt = input()
-            attempt = int(attempt)
+            while True:
+                try:
+                    attempt = input()
+                    attempt = int(attempt)
+                    break
+                except ValueError:
+                    print("Please select a number.")
             Scene.clear(self)
 
             if attempt == answer[i - 1]:
@@ -520,7 +532,7 @@ class EarthRoom(Scene):
 class FireRoom(Scene):
 
     def enter(self):
-        print("Fortunately, Ember Island was not too far from where you were. After a few days of traveling you finally make it to Ember Island. A young man, with a scar on his face, approaches you.\n\n'Hello, Zuko here, I will be teaching  you firebending. We must hurry.'\n")
+        print("Fortunately, Ember Island was not too far from where you were. After a few days of traveling you finally make it to Ember Island. A young man, with a scar on his face, approaches you.\n\n'Hello, Zuko here, I will be teaching you firebending. We must hurry.'\n")
 
         print("\t\t\t\t--- A month of training has passsed. ---\n")
         print(
