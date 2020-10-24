@@ -55,8 +55,8 @@ class User(object):
                             break
                         luck = randint(1, 10)
                         if luck <= 6:
-                            print("You dealt 20 damage.")
-                            damage = 20
+                            print("You dealt 15 damage.")
+                            damage = 15
                             enemy.hp -= damage
                         elif luck > 6:
                             print("You landed a critical hit. You dealt 30 damage.")
@@ -599,15 +599,15 @@ class BossBattle(Scene):
         Scene.clear(self)
 
         print(f"[ FIRE LORD OZAI ] Avatar, you will be defeated here today, prepare to disappoint all of your loved ones!\n\n")
-        i = 0
+
         while True:
 
-            if player.hp <= 0:
-                print("You have failed the world...You could not beat Fire Lord Ozai so he has taken over the world. All hope is lost...")
-                return 'final scene'
             if enemy.hp <= 0:
                 print(
                     "You have defeated the Fire Lord! Peace is restored and you found a well paying job!!")
+                return 'final scene'
+            elif player.hp <= 0:
+                print("You have failed the world...You could not beat Fire Lord Ozai so he has taken over the world. All hope is lost...")
                 return 'final scene'
 
             print(
