@@ -3,7 +3,6 @@ from os import system, name
 import time
 from random import randint
 import random
-from colorama import Fore, Back, Style
 
 
 class User(object):
