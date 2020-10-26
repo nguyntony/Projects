@@ -1,8 +1,9 @@
 from textwrap import dedent
-from os import system, name
 import time
 from random import randint
 import random
+from subprocess import call
+import os
 
 
 class User(object):
@@ -25,6 +26,10 @@ class User(object):
             'Terraform': '[ AVATAR ] You shift the land around the Fire Lord, causing him to not land a direct hit.',
             'Cryo Shield': '[ AVATAR ] You shield yourself with a thick armor of ice, minimizing the damage from the Fire Lord\'s attack.'
         }
+        self.airskills = ["Hurricane Barrage", "Leaping Whirlwind"]
+        self.waterskills = ["Tidal Whip", "Cryo Shield"]
+        self.earthskills = ["Geo Smash", "Terraform"]
+        self.fireskills = ["Electro Shock", "Scorching Vortex"]
 
     def show_offensive(self):
         for i, skill in enumerate(player.attack):
@@ -73,6 +78,28 @@ class User(object):
                 except IndexError:
                     print("Please select an ability number.")
 
+    def skill_selection(self, skill_list):
+
+        while True:
+            try:
+                choice = int(input("> "))
+
+                if choice == 1:
+                    player.attack.append(skill_list[0])
+                    choice = skill_list[0]
+                    break
+                elif choice == 2:
+                    player.defend.append(skill_list[1])
+                    choice = skill_list[1]
+                    break
+                else:
+                    print("Please select the number 1 or 2.")
+
+            except ValueError:
+                print("Please select the number 1 or 2.")
+
+        print(f"You have successfully learned {choice}.")
+
 
 class Enemy(object):
 
@@ -80,14 +107,18 @@ class Enemy(object):
         self.name = "Fire Lord Ozai"
         self.hp = 100
         self.skills = [
-            "He takes a deep breath then hurls a giant fireball at you.",
-            "He harnesses the power from his surroundings and shoots lightning at you.",
+            "He quickly takes a deep breath then exhales a giant fireball at you.",
+            "He harnesses power from within then shoots lightning at you.",
             "He jumps into the air and unleashes an onslaught of quick fire bullets.",
-            "He unleashes a series of lightning orbs at you."
+            "He hurls a series of lightning bullets at you.",
+            "He throws out a barrage of flamethrowers from his fists.",
+            "He entraps you inside of a scorching flame vortex.",
+            "He lashes you with blazing fire whips.",
+            "He launches a series of fiery missles."
         ]
 
     def enemy_attacks(self):
-        random_num = randint(0, 3)
+        random_num = randint(0, len(enemy.skills) - 1)
         hit = 15
 
         print(f"\n[ FIRE LORD OZAI ] {enemy.skills[random_num]}")
@@ -96,7 +127,7 @@ class Enemy(object):
         player.hp -= hit
 
     def player_blocked(self):
-        random_num = randint(0, 3)
+        random_num = randint(0, len(enemy.skills) - 1)
         hit = 20
         if len(player.defend) == 1:
             print(
@@ -147,10 +178,7 @@ class Enemy(object):
 class Scene(object):
 
     def clear(self):
-        if name == "nt":
-            _ = system('cls')
-        else:
-            _ = system('clear')
+        call('clear' if os.name == 'posix' else 'cls')
 
     def enter(self):
         print("This scene is not yet configured.")
@@ -164,7 +192,7 @@ class Engine(object):
 
     def play(self):
         current_scene = self.scene_map.opening_scene()
-        last_scene = self.scene_map.next_scene('final scene')
+        last_scene = self.scene_map.next_scene('boss battle')
 
         while current_scene != last_scene:
             next_scene_name = current_scene.enter()
@@ -182,10 +210,11 @@ class Puzzle(object):
             'your name': "It belongs to you, but other people use it more than you do.\n",
             'piano': "What has many keys but can't open a single lock?\n",
             'footsteps': "The more you take, the more you leave behind. What am I?\n",
-            'tomorrow': "What is always coming but never arrives?\n",
-
+            'tomorrow': "What is always coming but never arrives?\n"
         }
-        riddles_key = ["confidence", "your name", "piano", "footsteps"]
+
+        riddles_key = ["confidence", "your name",
+                       "piano", "footsteps", "tomorrow"]
         random_num = randint(0, len(riddles_key) - 1)
         answer = riddles_key[random_num]
         chosen_riddle = riddles[answer]
@@ -201,13 +230,10 @@ class Puzzle(object):
                 break
                 # have the game continue
             elif attempts >= 1:
-                print("Maybe try googling the answer...")
+                print("Maybe try googling the answer...\n")
             else:
                 print("Try again.\n")
                 attempts += 1
-
-            # if attempts > 1:
-            #     print("Maybe try googling the answer...")
 
     def second_puz(self):
         # second puzzle will be a memorization game.
@@ -258,7 +284,7 @@ class Puzzle(object):
 
                     if attempts == 0:
                         seconds += 2
-                        attempts = 3
+                        attempts = 2
                         print(
                             "You somehow manage to take another glimpse of the scroll.")
                         print(
@@ -329,12 +355,16 @@ class Puzzle(object):
 
         opponent_elements = ["water", "fire", "earth"]
         opponent = opponent_elements[randint(0, 2)]
+        hint_color = ""
+
         choice = input(
             "Choose an element (Fire, Water, or Earth):\n> ").lower()
         Scene.clear(self)
         rounds = 0
+        tries = 0
 
         while rounds < 3:
+            tries += 1
             print(f"> {choice}\n")
             if choice == "water":
                 if opponent == "fire":
@@ -370,15 +400,30 @@ class Puzzle(object):
                     print("[Outcome] You hurl a barrage of small fireballs at the water sprite, it blocks your attack with a powerful wave. The sprite then attacks you with a follow-up water whip.")
             else:
                 print("Select one of the three elements.\n", opponent_elements)
+
+            opponent = opponent_elements[randint(0, 2)]
+
+            if tries >= 5 and rounds < 3:
+                if opponent == "water":
+                    hint_color = "blue"
+                elif opponent == "fire":
+                    hint_color = "red"
+                elif opponent == "earth":
+                    hint_color = "green"
+
+                print(
+                    f"\nHINT: You notice that the sprite's crystal is glowing {hint_color}.")
+
             if rounds < 3:
                 choice = input("\nChoose an element.\n> ").lower()
-                opponent = opponent_elements[randint(0, 2)]
                 Scene.clear(self)
 
 
 class OpeningScene(Scene):
 
     def enter(self):
+
+        Scene.clear(self)
 
         print("Chosen one, what is your name?")
 
@@ -422,26 +467,9 @@ class AirRoom(Scene):
         print(f"[ 2. LEAPING WHIRLWIND ]\nThis is a defensive ability that allows you to move quickly through the air, your opponent will have a difficult time landing a direct hit.\n\n")
         print("Please select 1 or 2.")
 
-        while True:
-            try:
-                choice = int(input("> "))
-
-                if choice == 1:
-                    player.attack.append("Hurricane Barrage")
-                    choice = "Hurricane Barrage"
-                    break
-                elif choice == 2:
-                    player.defend.append("Leaping Whirlwind")
-                    choice = "Leaping Whirlwind"
-                    break
-                else:
-                    print("Please select the number 1 or 2.")
-
-            except ValueError:
-                print("Please select the number 1 or 2.")
-
-        print(f"You have successfully learned {choice}.")
+        player.skill_selection(player.airskills)
         print("Chosen One, continue your journey and travel to the Southern Water Tribe to meet your next mentor.")
+
         input("\nPress 'RETURN' to continue.")
         Scene.clear(self)
 
@@ -481,25 +509,7 @@ class WaterRoom(Scene):
         print(f"[ 2. CRYO SHIELD ]\nThis is a defensive ability that creates an ice shield to block your opponent's attacks.\n\n")
         print("Please select 1 or 2.")
 
-        while True:
-            try:
-                choice = int(input("> "))
-
-                if choice == 1:
-                    player.attack.append("Tidal Whip")
-                    choice = "Tidal Whip"
-                    break
-                elif choice == 2:
-                    player.defend.append("Cryo Shield")
-                    choice = "Cryo Shield"
-                    break
-                else:
-                    print("Please select the number 1 or 2.")
-
-            except ValueError:
-                print("Please select the number 1 or 2.")
-
-        print(f"You have successfully learned {choice}.")
+        player.skill_selection(player.waterskills)
         print("Chosen One, continue your journey and travel to Ba Sing Se to meet your next mentor.")
         input("\nPress 'RETURN' to continue.")
         Scene.clear(self)
@@ -533,25 +543,7 @@ class EarthRoom(Scene):
         print(f"[ 2. TERRAFORM ]\nThis is a defensive ability that shifts the landscape of the battle and causes your opponent to miss their attack.\n\n")
         print("Please select 1 or 2.")
 
-        while True:
-            try:
-                choice = int(input("> "))
-
-                if choice == 1:
-                    player.attack.append("Geo Smash")
-                    choice = "Geo Smash"
-                    break
-                elif choice == 2:
-                    player.defend.append("Terraform")
-                    choice = "Terraform"
-                    break
-                else:
-                    print("Please select the number 1 or 2.")
-
-            except ValueError:
-                print("Please select the number 1 or 2.")
-
-        print(f"You have successfully learned {choice}.")
+        player.skill_selection(player.earthskills)
         print("Chosen One, continue your journey and travel to Ember Island to meet your next mentor.")
         input("\nPress 'RETURN' to continue.")
         Scene.clear(self)
@@ -581,40 +573,15 @@ class FireRoom(Scene):
 
         print("You read the Lost fire Scroll and it offers two abilites, however you are only able to master one of the two abilities. Which skill would you like to master?\n")
         print(f"[ 1. ELECTRO SHOCK ]\nThis is an offensive ability that strike your opponent with a powerful jolt of electricity.\n\n")
-        print(f"[ 2. SCORCHING BARRIER ]\nThis is a defensive ability that will incinerate anything your opponent throws at you.\n\n")
+        print(f"[ 2. SCORCHING VORTEX ]\nThis is a defensive ability that will incinerate anything your opponent throws at you.\n\n")
         print("Please select 1 or 2.")
 
-        while True:
-            try:
-                choice = int(input("> "))
-
-                if choice == 1:
-                    player.attack.append("Electro Shock")
-                    choice = "Electro Shock"
-                    break
-                elif choice == 2:
-                    player.defend.append("Scorching Barrier")
-                    choice = "Scorching Barrier"
-                    break
-                else:
-                    print("Please select the number 1 or 2.")
-
-            except ValueError:
-                print("Please select the number 1 or 2.")
-
-        print(f"You have successfully learned {choice}.")
+        player.skill_selection(player.fireskills)
         print("Chosen One, it is time to face the Fire Lord, travel to the Fire Nation to defeat the Fire Lord!")
         input("\nPress 'RETURN' to continue.")
         Scene.clear(self)
 
         return 'boss battle'
-
-
-class FinalScene(Scene):
-
-    def enter(self):
-        print("The end")
-        return 'final scene'
 
 
 class BossBattle(Scene):
@@ -676,8 +643,7 @@ class Map(object):
         'water room': WaterRoom(),
         'earth room': EarthRoom(),
         'fire room': FireRoom(),
-        'boss battle': BossBattle(),
-        'final scene': FinalScene()
+        'boss battle': BossBattle()
     }
 
     def __init__(self, start_scene):
