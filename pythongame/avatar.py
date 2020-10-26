@@ -196,16 +196,18 @@ class Puzzle(object):
         while True:
             user_answer = input("Answer:\n> ").lower()
 
-            if attempts > 2:
-                print("Maybe try googling the answer...")
-
             if user_answer == answer:
                 print("That's right!")
                 break
                 # have the game continue
+            elif attempts >= 1:
+                print("Maybe try googling the answer...")
             else:
                 print("Try again.\n")
                 attempts += 1
+
+            # if attempts > 1:
+            #     print("Maybe try googling the answer...")
 
     def second_puz(self):
         # second puzzle will be a memorization game.
@@ -329,10 +331,11 @@ class Puzzle(object):
         opponent = opponent_elements[randint(0, 2)]
         choice = input(
             "Choose an element (Fire, Water, or Earth):\n> ").lower()
-        # choice = choice.lower()
+        Scene.clear(self)
         rounds = 0
 
         while rounds < 3:
+            print(f"> {choice}\n")
             if choice == "water":
                 if opponent == "fire":
                     print(
@@ -364,7 +367,7 @@ class Puzzle(object):
                     print(
                         "[Outcome] You and the fire sprite both hurl a quick fireball at one another. You both are evenly matched.")
                 elif opponent == "water":
-                    print("[Outcome] You hurl a barrage of small fireballs at the water sprite, it blocks your attack with a powerful wave. You get hurt by following water whip.")
+                    print("[Outcome] You hurl a barrage of small fireballs at the water sprite, it blocks your attack with a powerful wave. The sprite then attacks you with a follow-up water whip.")
             else:
                 print("Select one of the three elements.\n", opponent_elements)
             if rounds < 3:
