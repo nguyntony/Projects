@@ -22,7 +22,7 @@ class User(object):
         self.defend = ["Block"]
         self.defend_desc = {
             'Leaping Whirlwind': '[ AVATAR ] You launch yourself into the air, attempting to dodge the Fire Lord\'s attack.',
-            'Scorching Barrier': '[ AVATAR ] You blast a scorching fire from your palms, attempting to absorb the Fire Lord\'s attack.',
+            'Scorching Vortex': '[ AVATAR ] You blast a scorching fire from your palms, attempting to absorb the Fire Lord\'s attack.',
             'Terraform': '[ AVATAR ] You shift the land around the Fire Lord, causing him to not land a direct hit.',
             'Cryo Shield': '[ AVATAR ] You shield yourself with a thick armor of ice, minimizing the damage from the Fire Lord\'s attack.'
         }
@@ -274,7 +274,7 @@ class Puzzle(object):
 
             while attempts > 0:
                 user_attempt = input(
-                    "Type out the sequence here using 'WASD'\n")
+                    "Type out the sequence here using 'WASD'\n> ")
                 if user_attempt == answer:
                     print("You got it!")
                     break
